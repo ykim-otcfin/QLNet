@@ -23,41 +23,49 @@ namespace QLNet
    public class ConstantOptionletVolatility : OptionletVolatilityStructure
    {
       private Handle<Quote> volatility_;
+      private VolatilityType volType_;
+      private double displacement_;
 
       //! floating reference date, floating market data
       public ConstantOptionletVolatility(int settlementDays, Calendar cal, BusinessDayConvention bdc,
-                                         Handle<Quote> vol, DayCounter dc)
+                                         Handle<Quote> vol, DayCounter dc, VolatilityType volType = VolatilityType.ShiftedLognormal, double displacement = 0.0)
          : base(settlementDays, cal, bdc, dc)
       {
          volatility_ = vol;
-
+         volType_ = volType;
+         displacement_ = displacement;
          volatility_.registerWith(update);
       }
 
       //! fixed reference date, floating market data
       public ConstantOptionletVolatility(Date referenceDate, Calendar cal, BusinessDayConvention bdc,
-                                         Handle<Quote> vol, DayCounter dc)
+                                         Handle<Quote> vol, DayCounter dc, VolatilityType volType = VolatilityType.ShiftedLognormal, double displacement = 0.0)
          : base(referenceDate, cal, bdc, dc)
       {
          volatility_ = vol;
-
+         volType_ = volType;
+         displacement_ = displacement;
          volatility_.registerWith(update);
       }
 
       //! floating reference date, fixed market data
       public ConstantOptionletVolatility(int settlementDays, Calendar cal, BusinessDayConvention bdc,
-                                         double vol, DayCounter dc)
+                                         double vol, DayCounter dc, VolatilityType volType = VolatilityType.ShiftedLognormal, double displacement = 0.0)
          : base(settlementDays, cal, bdc, dc)
       {
          volatility_ = new Handle<Quote>(new SimpleQuote(vol));
+         volType_ = volType;
+         displacement_ = displacement;
       }
 
       //! fixed reference date, fixed market data
       public ConstantOptionletVolatility(Date referenceDate, Calendar cal, BusinessDayConvention bdc,
-                                         double vol, DayCounter dc)
+                                         double vol, DayCounter dc, VolatilityType volType = VolatilityType.ShiftedLognormal, double displacement = 0.0)
          : base(referenceDate, cal, bdc, dc)
       {
          volatility_ = new Handle<Quote>(new SimpleQuote(vol));
+         volType_ = volType;
+         displacement_ = displacement;
       }
 
 
@@ -65,6 +73,15 @@ namespace QLNet
       public override double minStrike() { return double.MinValue; }
       public override double maxStrike() { return double.MaxValue; }
 
+      public override VolatilityType volatilityType()
+      {
+         return volType_;
+      }
+
+      public override double displacement()
+      {
+         return displacement_;
+      }
       protected override SmileSection smileSectionImpl(Date d)
       {
          double atmVol = volatility_.link.value();
