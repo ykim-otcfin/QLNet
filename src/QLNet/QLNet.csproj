@@ -16,7 +16,7 @@
     <PackageTags>QLNet QuantLib quantitative finance financial</PackageTags>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>OTC.PATOne.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../../../OTC.PATOne.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
